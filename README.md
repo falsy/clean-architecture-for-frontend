@@ -1,4 +1,4 @@
-# Clean Architecture for Web
+# Clean Architecture for Frontend
 
 Clean Architecture is widely used in many projects alongside `DDD(Domain-driven Design)` and `MSA(Microservice Architecture)`. This project is an idea-driven initiative that leverages TypeScript, a monorepo setup, and Clean Architecture to effectively scale and maintain various web client services that share the same domain.
 

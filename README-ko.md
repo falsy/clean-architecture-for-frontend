@@ -1,4 +1,4 @@
-# Clean Architecture for Web
+# Clean Architecture for Frontend
 
 클린 아키텍처는 `DDD(Domain-driven Design)`와 `MSA(Micro Service Architecture)`와 함께 많은 프로젝트에서 활용되고 있습니다. 이 프로젝트에서는 TypeScript를 사용하면서 동일한 도메인을 공유하는 다양한 웹 클라이언트 서비스를 모노레포 구성과 클린 아키텍처 설계를 통해서 서비스를 효과적으로 확장하거나 유지 보수를 용이하게 하는 하나의 아이디어 프로젝트입니다.
 
