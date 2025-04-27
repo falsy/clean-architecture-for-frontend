@@ -1,14 +1,13 @@
+import IInfratructures from "adapters/infrastructures/interfaces/IInfrastructures"
+import PostRepository from "./adapters/repositories/PostRepository"
+import CommentRepository from "./adapters/repositories/CommentRepository"
 import UserRepository from "adapters/repositories/UserRepository"
-import CommentRepository from "../adpaters/repositories/CommentRepository"
-import PostRepository from "../adpaters/repositories/PostRepository"
 import IRepositories from "./interfaces/IRepositories"
-import ClientHTTP from "./ClientHTTP"
 
-export default (baseUrl: string): IRepositories => {
-  const clientHTTP = new ClientHTTP(baseUrl)
+export default (infrastructures: IInfratructures): IRepositories => {
   return {
-    post: new PostRepository(),
-    comment: new CommentRepository(),
-    user: new UserRepository(clientHTTP)
+    post: new PostRepository(infrastructures.connector),
+    comment: new CommentRepository(infrastructures.connector),
+    user: new UserRepository(infrastructures.connector)
   }
 }

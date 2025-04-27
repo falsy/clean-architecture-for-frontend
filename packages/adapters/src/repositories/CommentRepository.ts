@@ -1,20 +1,24 @@
 import ICommentRepository from "domains/repositories/interfaces/ICommentRepository"
 import ICommentDTO from "domains/dtos/interfaces/ICommentDTO"
-import { IClientHTTP } from "../infrastructures/interfaces/IClientHTTP"
+import IConnector from "../infrastructures/interfaces/IConnector"
 import CommentDTO from "../dtos/CommentDTO"
 
 export default class CommentRepository implements ICommentRepository {
-  private client: IClientHTTP
+  private connector: IConnector
 
-  constructor(client: IClientHTTP) {
-    this.client = client
+  constructor(connector: IConnector) {
+    this.connector = connector
   }
 
   async getComments(postId: string): Promise<ICommentDTO[]> {
     try {
-      const { data } = await this.client.get<ICommentDTO[]>(
+      const { data } = await this.connector.get<ICommentDTO[]>(
         `/api/posts/${postId}/comments`
       )
+
+      if (!data) {
+        return []
+      }
 
       return data.map((comment) => {
         return new CommentDTO(comment)
@@ -26,7 +30,7 @@ export default class CommentRepository implements ICommentRepository {
 
   async createComment(postId: string, content: string): Promise<boolean> {
     try {
-      const { data } = await this.client.post<boolean>(
+      const { data } = await this.connector.post<boolean>(
         `/api/posts/${postId}/comments`,
         {
           content
@@ -41,7 +45,7 @@ export default class CommentRepository implements ICommentRepository {
 
   async updateComment(commentId: string, content: string): Promise<string> {
     try {
-      const { data } = await this.client.put<string>(
+      const { data } = await this.connector.put<string>(
         `/api/comments/${commentId}`,
         {
           content
@@ -56,7 +60,7 @@ export default class CommentRepository implements ICommentRepository {
 
   async deleteComment(commentId: string): Promise<boolean> {
     try {
-      const { data } = await this.client.delete<boolean>(
+      const { data } = await this.connector.delete<boolean>(
         `/api/comments/${commentId}`
       )
 

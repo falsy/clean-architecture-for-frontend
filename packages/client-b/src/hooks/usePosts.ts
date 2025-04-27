@@ -7,7 +7,7 @@ import presenters from "../di"
 const PostsAtoms = atom<IPost[]>([])
 
 export default function usePosts() {
-  const di = useMemo(() => presenters(), [])
+  const di = useMemo(() => presenters(globalThis.localStorage), [])
 
   const [posts, setPosts] = useAtom<IPost[]>(PostsAtoms)
   const [optimisticPosts, setOptimisticPosts] = useOptimistic(posts)

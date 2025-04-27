@@ -1,18 +1,22 @@
 import IUserRepository from "domains/repositories/interfaces/IUserRepository"
 import IUserDTO from "domains/dtos/interfaces/IUserDTO"
-import { IClientHTTP } from "../infrastructures/interfaces/IClientHTTP"
+import IConnector from "../infrastructures/interfaces/IConnector"
 import UserDTO from "../dtos/UserDTO"
 
 export default class UserRepository implements IUserRepository {
-  private client: IClientHTTP
+  private connector: IConnector
 
-  constructor(client: IClientHTTP) {
-    this.client = client
+  constructor(connector: IConnector) {
+    this.connector = connector
   }
 
   async getUser(): Promise<IUserDTO> {
     try {
-      const { data } = await this.client.get<IUserDTO>("/api/users")
+      const { data } = await this.connector.get<IUserDTO>("/api/users")
+
+      if (!data) {
+        return {} as IUserDTO
+      }
 
       return new UserDTO(data)
     } catch (e) {

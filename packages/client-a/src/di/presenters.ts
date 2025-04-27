@@ -1,7 +1,7 @@
+import IUseCases from "domains/useCases/interfaces/IUseCases"
+import IPresenters from "adapters/presenters/interfaces/IPresenters"
 import PostPresenter from "adapters/presenters/PostPresenter"
 import UserPresenter from "adapters/presenters/UserPresenter"
-import IPresenters from "./interfaces/IPresenters"
-import IUseCases from "./interfaces/IUseCases"
 
 export default (useCases: IUseCases): IPresenters => {
   return {
