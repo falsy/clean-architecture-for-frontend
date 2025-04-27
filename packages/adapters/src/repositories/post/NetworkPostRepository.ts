@@ -1,20 +1,25 @@
-import IPostRepository from "domains/repositories/interfaces/IPostRepository"
 import { IRequestPostParams } from "domains/aggregates/interfaces/IPost"
-import UserInfoVO from "domains/vos/UserInfoVO"
 import IPostDTO from "domains/dtos/interfaces/IPostDTO"
-import { IClientHTTP } from "../infrastructures/interfaces/IClientHTTP"
-import PostDTO from "../dtos/PostDTO"
+import UserInfoVO from "domains/vos/UserInfoVO"
+import IPostRepository from "domains/repositories/interfaces/IPostRepository"
+import PostDTO from "adapters/dtos/PostDTO"
+import { IAxiosHTTP } from "adapters/infrastructures/interfaces/IAxiosHTTP"
 
-export default class PostRepository implements IPostRepository {
-  private client: IClientHTTP
+export default class NetworkPostRepository implements IPostRepository {
+  private connector: IAxiosHTTP
 
-  constructor(client: IClientHTTP) {
-    this.client = client
+  constructor(connector: IAxiosHTTP) {
+    this.connector = connector
   }
 
   async getPosts(): Promise<IPostDTO[]> {
     try {
-      const { data } = await this.client.get<IPostDTO[]>("/api/posts")
+      const { data } = await this.connector.get<IPostDTO[]>("/api/posts")
+
+      if (!data) {
+        return []
+      }
+
       return data.map((post) => {
         return new PostDTO({
           id: post.id,
@@ -32,7 +37,13 @@ export default class PostRepository implements IPostRepository {
 
   async getPost(postId: string): Promise<IPostDTO> {
     try {
-      const { data } = await this.client.get<IPostDTO>(`/api/posts/${postId}`)
+      const { data } = await this.connector.get<IPostDTO>(
+        `/api/posts/${postId}`
+      )
+
+      if (!data) {
+        return {} as IPostDTO
+      }
 
       return new PostDTO({
         id: data.id,
@@ -49,7 +60,7 @@ export default class PostRepository implements IPostRepository {
 
   async createPost(params: IRequestPostParams): Promise<boolean> {
     try {
-      const { data } = await this.client.post<boolean>("/api/posts", params)
+      const { data } = await this.connector.post<boolean>("/api/posts", params)
 
       return data
     } catch (e) {
@@ -62,7 +73,7 @@ export default class PostRepository implements IPostRepository {
     params: IRequestPostParams
   ): Promise<string> {
     try {
-      const { data } = await this.client.put<string>(
+      const { data } = await this.connector.put<string>(
         `/api/posts/${postId}`,
         params
       )
@@ -75,7 +86,9 @@ export default class PostRepository implements IPostRepository {
 
   async deletePost(postId: string): Promise<boolean> {
     try {
-      const { data } = await this.client.delete<boolean>(`/api/posts/${postId}`)
+      const { data } = await this.connector.delete<boolean>(
+        `/api/posts/${postId}`
+      )
 
       return data
     } catch (e) {

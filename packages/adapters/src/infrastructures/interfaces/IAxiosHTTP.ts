@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios"
 
-export interface IClientHTTP {
+export interface IAxiosHTTP {
   get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>
   post<T>(
     url: string,

@@ -142,9 +142,22 @@ Infrastructure 레이어에서는 웹 서비스에서 일반적으로 많이 사
 
 Presenters 레이어에서는 UI에서 필요로하는 메서드를 가지고 사용자의 요청을 서버로 전달하는 역할을 하며, 요청에 따라 엔티티 데이터를 UI에서 사용되는 View Model로 값을 변환하여 응답하는 역할을 하기도 합니다.
 
+## Dependency Injection
+
+![Alt Dependency Injection](.github/images/dependency-injection.png#gh-light-mode-only)
+![Alt Dependency Injection](.github/images/dependency-injection-dark.png#gh-dark-mode-only)
+
+각각의 레이어는 최종적으로 의존성 주입(Dependency Injection)을 통해 동작합니다. 예로 들면, 각 레이어별로 인터페이스를 정의하고 이 인터페이스를 기반으로 다양한 구현체를 만들어 필요에 따라 주입하여 사용합니다.
+
+샘플 프로젝트에서는 Repository 인터페이스를 정의하고, 이를 구현하는 NetworkRepository(HTTP 통신)와 StorageRepository(웹 스토리지 사용)를 구성한 뒤, 서비스에 따라 선택적으로 주입하여 사용하고 있습니다.
+
+이처럼 의존성 주입을 통한 서비스 구성은 역할과 책임을 명확히 나누어 수정 범위를 최소화할 수 있으며, 추상화에 의존하는 설계를 통해 새로운 구현체를 추가하여 높은 확장성과 유연성을 가진 서비스를 개발할 수 있습니다.
+
+> 일반적으로 HTTP 통신과 웹 스토리지는 각기 다른 역할을 하므로, 샘플 프로젝트처럼 두 구현체를 같은 동작으로 정의하고 선택적으로 사용하는 경우는 드뭅니다. 이 예시는 단순히 다양한 구현체를 정의하고 그 차이를 보여주기 위한 목적으로 사용되었습니다.
+
 # Services
 
-샘플 프로젝트의 클라이언트 서비스는 client-a, client-b 이렇게 2개의 간단한 서비스로 구성되어 있습니다. 두 서비스 모두 동일한 도메인 기반의 서비스로 UI 컴포넌트는 [Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/)을 기반으로 설계하였습니다.
+샘플 프로젝트의 클라이언트 서비스는 Client-A, Client-B 이렇게 2개의 간단한 서비스로 구성되어 있습니다. 두 서비스 모두 동일한 도메인 기반의 서비스로 UI 컴포넌트는 [Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/)을 기반으로 설계하였습니다.
 
 ## Client-A
 
@@ -298,9 +311,9 @@ Presenter 레이어의 Hooks에서도 위와 같이 Comment의 삭제 요청에 
 Next.js, Jotai, Tailwind CSS, Jest, RTL, Cypress
 ```
 
-Client-B는 Client-A와 동일한 도메인을 활용한, 서비스 확장을 표현하는 서비스로 Client-A 서비스와 유사하지만 Client-A 서비스와 다르게 Next.js를 기반으로 하며 기존의 Client-A 서비스는 API 서버와의 HTTP 통신을 통해 데이터를 조작하지만 Client-b는 HTTP 통신 없이 로컬 저장소(Local Storage)를 기반으로 설계하였습니다.
+Client-B는 Client-A와 동일한 도메인을 활용한, 서비스 확장을 표현하는 서비스로 Client-A 서비스와 유사하지만 Client-A 서비스와 다르게 Next.js를 기반으로 하며 기존의 Client-A 서비스는 API 서버와의 HTTP 통신을 통해 데이터를 조작하지만 Client-B는 HTTP 통신 없이 로컬 저장소(Local Storage)를 기반으로 동작하는 차이가 있습니다.
 
-그렇기 때문에 Client-A와 다르게 Client-B에서는 `Domains`에서 정의한 Repository의 인터페이스를 구체화한 새로운 Repository를 구성하고 이를 의존성 주입하여 사용함으로써 간단하게 기존의 서비스를 확장한 새로운 서비스를 구현할 수 있습니다.
+Client-A와 같은 `Domains` 레이어와 `Adpaters` 레이어에서 정의한 인터페이스와 구현체를 활용하여 높은 코드 재사용성을 가지고 구성할 수 있습니다. 또한, 의존성 주입(DI) 과정에서 HTTP 통신을 사용하는 Repository를 대신하여 웹 스토리지를 사용하는 Repository를 사용하는 것만으로 간단하게 새로운 서비스를 구현할 수 있습니다.
 
 > Client-B는 구제적인 기능 구현보다는 동일한 도메인을 활용한 다른 클라이언트 서비스 구성에 대한 간단한 예시입니다.
 
