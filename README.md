@@ -145,6 +145,19 @@ Similarly, in the sample project, the Repository layer performs POST, GET, PUT, 
 
 The Presenter layer handles requests from the UI, forwarding them to the server. It also converts entity data into View Models used in the UI, responding appropriately based on user requests.
 
+## Dependency Injection
+
+![Alt Dependency Injection](.github/images/dependency-injection.png#gh-light-mode-only)
+![Alt Dependency Injection](.github/images/dependency-injection-dark.png#gh-dark-mode-only)
+
+Each layer ultimately operates through Dependency Injection. For example, interfaces are defined for each layer, and various implementations are created based on these interfaces, which are then injected as needed.
+
+In the sample project, a Repository interface is defined, and two implementations, NetworkRepository (for HTTP communication) and StorageRepository (for web storage), are created. These are then injected into services based on the requirements.
+
+This approach to service configuration through Dependency Injection helps clearly define roles and responsibilities, minimizing the scope of changes. By relying on abstraction in the design, new implementations can be easily added, allowing for highly scalable and flexible service development.
+
+> Typically, HTTP communication and web storage serve different purposes, so it is uncommon to define and selectively use two implementations in the same way as in the sample project. This example was simply used to demonstrate the differences between various implementations.
+
 # Services
 
 The sample project's client services consist of two simple services: client-a and client-b. Both services are built based on the same domain-driven architecture, and their UI components are designed following the principles of [Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/).
@@ -301,11 +314,11 @@ In the Presenter layer's hooks, we implemented optimistic updates using the meth
 Next.js, Jotai, Tailwind CSS, Jest, RTL, Cypress
 ```
 
-The Client-B service is an extension of Client-A, utilizing the same domain model to demonstrate service scalability. While it shares similarities with Client-A, the key difference is that Client-B is built on Next.js. Unlike Client-A, which manipulates data through HTTP communication with an API server, Client-B is designed to operate without HTTP communication, relying instead on local storage.
+Client-B is a service that represents an extension of the service, using the same domain as Client-A. While similar to Client-A, Client-B is built on Next.js, whereas Client-A operates through HTTP communication with an API server to manipulate data. In contrast, Client-B operates based on local storage (Local Storage) without HTTP communication.
 
-Therefore, unlike Client-A, Client-B implements new repositories by concretely defining the repository interfaces from `Domains` and injecting these dependencies to create a new service that extends the existing functionality in a straightforward manner.
+By utilizing the interfaces and implementations defined in the Domains and Adapters layers, similar to Client-A, Client-B can be structured with high code reusability. Additionally, during the dependency injection (DI) process, a simple switch from using a repository that communicates via HTTP to one that uses local storage makes it easy to implement a new service.
 
-> Client-B is a simple demonstration of another client service utilizing the same domain, focusing on the service structure rather than specific feature implementations.
+> Client-B serves as a simple example of structuring another client service using the same domain, rather than focusing on the specific functionality of the service.
 
 ## Design System
 
