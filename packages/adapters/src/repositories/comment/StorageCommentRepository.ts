@@ -1,19 +1,19 @@
-import IConnector from "adapters/infrastructures/interfaces/IConnector"
-import ICommentRepository from "domains/repositories/interfaces/ICommentRepository"
 import ICommentDTO from "domains/dtos/interfaces/ICommentDTO"
+import ICommentRepository from "domains/repositories/interfaces/ICommentRepository"
 import UserInfoVO from "domains/vos/UserInfoVO"
 import CommentDTO from "adapters/dtos/CommentDTO"
+import { IWebStorage } from "adapters/infrastructures/interfaces/IWebStorage"
 
-export default class CommentRepository implements ICommentRepository {
-  private connector: IConnector
+export default class StorageCommentRepository implements ICommentRepository {
+  private connector: IWebStorage
 
-  constructor(connector: IConnector) {
+  constructor(connector: IWebStorage) {
     this.connector = connector
   }
 
   async getComments(postId: string): Promise<ICommentDTO[]> {
     try {
-      const { data } = await this.connector.get<ICommentDTO[]>("comments")
+      const data = await this.connector.get<ICommentDTO[]>("comments")
 
       if (!data) {
         return []
@@ -44,7 +44,7 @@ export default class CommentRepository implements ICommentRepository {
       })
 
       const comments = await this.getComments(postId)
-      const { data: isSucess } = await this.connector.post<boolean>(
+      const isSucess = await this.connector.post<boolean>(
         "comments",
         comments.concat(newComment)
       )
@@ -57,17 +57,14 @@ export default class CommentRepository implements ICommentRepository {
 
   async updateComment(commentId: string, content: string): Promise<string> {
     try {
-      const { data } = await this.connector.get<ICommentDTO[]>("comments")
+      const data = await this.connector.get<ICommentDTO[]>("comments")
       const findIndex = data.findIndex((comment) => comment.id === commentId)
       const updateAt = new Date().toISOString()
 
       data[findIndex].content = content
       data[findIndex].updatedAt = updateAt
 
-      const { data: isSucess } = await this.connector.put<boolean>(
-        "comments",
-        data
-      )
+      const isSucess = await this.connector.put<boolean>("comments", data)
 
       return isSucess ? updateAt : ""
     } catch (e) {
@@ -77,13 +74,10 @@ export default class CommentRepository implements ICommentRepository {
 
   async deleteComment(commentId: string): Promise<boolean> {
     try {
-      const { data } = await this.connector.get<ICommentDTO[]>("comments")
+      const data = await this.connector.get<ICommentDTO[]>("comments")
       const filter = data.filter((comment) => comment.id !== commentId)
 
-      const { data: isSucess } = await this.connector.put<boolean>(
-        "comments",
-        filter
-      )
+      const isSucess = await this.connector.put<boolean>("comments", filter)
 
       return isSucess
     } catch (e) {

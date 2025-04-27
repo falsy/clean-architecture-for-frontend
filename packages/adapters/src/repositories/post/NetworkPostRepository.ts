@@ -1,14 +1,14 @@
-import IPostRepository from "domains/repositories/interfaces/IPostRepository"
 import { IRequestPostParams } from "domains/aggregates/interfaces/IPost"
-import UserInfoVO from "domains/vos/UserInfoVO"
 import IPostDTO from "domains/dtos/interfaces/IPostDTO"
-import IConnector from "../infrastructures/interfaces/IConnector"
-import PostDTO from "../dtos/PostDTO"
+import UserInfoVO from "domains/vos/UserInfoVO"
+import IPostRepository from "domains/repositories/interfaces/IPostRepository"
+import PostDTO from "adapters/dtos/PostDTO"
+import { IAxiosHTTP } from "adapters/infrastructures/interfaces/IAxiosHTTP"
 
-export default class PostRepository implements IPostRepository {
-  private connector: IConnector
+export default class NetworkPostRepository implements IPostRepository {
+  private connector: IAxiosHTTP
 
-  constructor(connector: IConnector) {
+  constructor(connector: IAxiosHTTP) {
     this.connector = connector
   }
 

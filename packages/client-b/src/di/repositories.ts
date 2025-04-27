@@ -1,13 +1,13 @@
 import IInfratructures from "adapters/infrastructures/interfaces/IInfrastructures"
-import PostRepository from "./adapters/repositories/PostRepository"
-import CommentRepository from "./adapters/repositories/CommentRepository"
+import StoragePostRepository from "adapters/repositories/post/StoragePostRepository"
+import StorageCommentRepository from "adapters/repositories/comment/StorageCommentRepository"
 import UserRepository from "adapters/repositories/UserRepository"
 import IRepositories from "./interfaces/IRepositories"
 
 export default (infrastructures: IInfratructures): IRepositories => {
   return {
-    post: new PostRepository(infrastructures.connector),
-    comment: new CommentRepository(infrastructures.connector),
-    user: new UserRepository(infrastructures.connector)
+    post: new StoragePostRepository(infrastructures.storage),
+    comment: new StorageCommentRepository(infrastructures.storage),
+    user: new UserRepository(infrastructures.storage)
   }
 }

@@ -1,5 +1,7 @@
-import IConnector from "./IConnector"
+import { IAxiosHTTP } from "./IAxiosHTTP"
+import { IWebStorage } from "./IWebStorage"
 
 export default interface IInfratructures {
-  connector: IConnector
+  network?: IAxiosHTTP
+  storage?: IWebStorage
 }

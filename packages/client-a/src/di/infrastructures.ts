@@ -3,6 +3,6 @@ import AxiosHTTP from "adapters/infrastructures/AxiosHTTP"
 
 export default (baseUrl: string): IInfrastructures => {
   return {
-    connector: new AxiosHTTP(baseUrl)
+    network: new AxiosHTTP(baseUrl)
   }
 }

@@ -1,23 +1,16 @@
-import { AxiosRequestConfig } from "axios"
-import IConnector, { IConnectorResponse } from "./IConnector"
+import { AxiosRequestConfig, AxiosResponse } from "axios"
 
-export interface IAxiosHTTP extends IConnector {
-  get<T>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<IConnectorResponse<T>>
+export interface IAxiosHTTP {
+  get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>
   post<T>(
     url: string,
     data?: unknown,
     config?: AxiosRequestConfig
-  ): Promise<IConnectorResponse<T>>
+  ): Promise<AxiosResponse<T>>
   put<T>(
     url: string,
     data?: unknown,
     config?: AxiosRequestConfig
-  ): Promise<IConnectorResponse<T>>
-  delete<T>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<IConnectorResponse<T>>
+  ): Promise<AxiosResponse<T>>
+  delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>
 }

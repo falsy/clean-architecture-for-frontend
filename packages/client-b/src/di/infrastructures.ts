@@ -3,6 +3,6 @@ import WebStorage from "adapters/infrastructures/WebStorage"
 
 export default (target: Storage): IInfrastructures => {
   return {
-    connector: new WebStorage(target)
+    storage: new WebStorage(target)
   }
 }

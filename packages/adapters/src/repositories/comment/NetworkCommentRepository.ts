@@ -1,12 +1,12 @@
 import ICommentRepository from "domains/repositories/interfaces/ICommentRepository"
 import ICommentDTO from "domains/dtos/interfaces/ICommentDTO"
-import IConnector from "../infrastructures/interfaces/IConnector"
-import CommentDTO from "../dtos/CommentDTO"
+import CommentDTO from "adapters/dtos/CommentDTO"
+import { IAxiosHTTP } from "adapters/infrastructures/interfaces/IAxiosHTTP"
 
-export default class CommentRepository implements ICommentRepository {
-  private connector: IConnector
+export default class NetworkCommentRepository implements ICommentRepository {
+  private connector: IAxiosHTTP
 
-  constructor(connector: IConnector) {
+  constructor(connector: IAxiosHTTP) {
     this.connector = connector
   }
 

@@ -1,20 +1,20 @@
-import IConnector from "adapters/infrastructures/interfaces/IConnector"
-import IPostDTO from "domains/dtos/interfaces/IPostDTO"
-import IPostRepository from "domains/repositories/interfaces/IPostRepository"
 import { IRequestPostParams } from "domains/aggregates/interfaces/IPost"
+import IPostDTO from "domains/dtos/interfaces/IPostDTO"
 import UserInfoVO from "domains/vos/UserInfoVO"
+import IPostRepository from "domains/repositories/interfaces/IPostRepository"
 import PostDTO from "adapters/dtos/PostDTO"
+import { IWebStorage } from "adapters/infrastructures/interfaces/IWebStorage"
 
-export default class PostRepository implements IPostRepository {
-  private connector: IConnector
+export default class StoragePostRepository implements IPostRepository {
+  private connector: IWebStorage
 
-  constructor(connector: IConnector) {
+  constructor(connector: IWebStorage) {
     this.connector = connector
   }
 
   async getPosts(): Promise<IPostDTO[]> {
     try {
-      const { data } = await this.connector.get<IPostDTO[]>("posts")
+      const data = await this.connector.get<IPostDTO[]>("posts")
 
       if (!data) {
         return []
@@ -65,7 +65,7 @@ export default class PostRepository implements IPostRepository {
       })
       const data = await this.getPosts()
 
-      const { data: isSucess } = await this.connector.post<boolean>(
+      const isSucess = await this.connector.post<boolean>(
         "posts",
         data.concat(newPost)
       )
@@ -92,10 +92,7 @@ export default class PostRepository implements IPostRepository {
         return post
       })
 
-      const { data: isSucess } = await this.connector.put<boolean>(
-        "posts",
-        newPosts
-      )
+      const isSucess = await this.connector.put<boolean>("posts", newPosts)
 
       return isSucess ? updateAt : ""
     } catch (e) {
@@ -108,10 +105,7 @@ export default class PostRepository implements IPostRepository {
       const data = await this.getPosts()
       const filter = data.filter((post) => post.id !== postId)
 
-      const { data: isSucess } = await this.connector.put<boolean>(
-        "posts",
-        filter
-      )
+      const isSucess = await this.connector.put<boolean>("posts", filter)
 
       return isSucess
     } catch (e) {
