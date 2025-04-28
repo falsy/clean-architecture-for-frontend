@@ -2,11 +2,11 @@ import IUserInfoVO from "domains/vos/interfaces/IUserInfoVO"
 
 export default interface ICommentVM {
   readonly id: string
-  key: string
   readonly postId: string
   readonly author: IUserInfoVO
-  content: string
   readonly createdAt: Date
+  key: string
+  content: string
   updatedAt: Date
   updateContent(content: string): void
   applyUpdatedAt(date: Date): void

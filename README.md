@@ -178,12 +178,14 @@ Client-A directly utilizes elements from the `Domains` and `Adapters` layers and
 
 ```tsx
 import { API_URL } from "../constants"
+import infrastructuresFn from "./infrastructures"
 import repositoriesFn from "./repositories"
 import useCasesFn from "./useCases"
 import presentersFn from "./presenters"
 
-export default function di() {
-  const repositories = repositoriesFn(API_URL)
+export default function di(apiUrl = API_URL) {
+  const infrastructures = infrastructuresFn(apiUrl)
+  const repositories = repositoriesFn(infrastructures)
   const useCases = useCasesFn(repositories)
   const presenters = presentersFn(useCases)
 
@@ -234,11 +236,11 @@ import ICommentVM, { ICommentVMParams } from "./interfaces/ICommentVM"
 
 export default class CommentVM implements ICommentVM {
   readonly id: string
-  key: string
   readonly postId: string
   readonly author: IUserInfoVO
-  content: string
   readonly createdAt: Date
+  key: string
+  content: string
   updatedAt: Date
 
   constructor(parmas: ICommentVMParams) {

@@ -6,12 +6,12 @@ import CommentVM from "./CommentVM"
 
 export default class PostVM implements IPostVM {
   readonly id: string
+  readonly author: IUserInfoVO
+  readonly createdAt: Date
   key: string
   title: string
   content: string
-  readonly author: IUserInfoVO
   comments: ICommentVM[]
-  readonly createdAt: Date
   updatedAt: Date
 
   constructor(params: IPostVMParams) {

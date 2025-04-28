@@ -4,12 +4,12 @@ import ICommentVM from "./ICommentVM"
 
 export default interface IPostVM {
   readonly id: string
+  readonly author: IUserInfoVO
+  readonly createdAt: Date
   key: string
   title: string
   content: string
-  readonly author: IUserInfoVO
   comments: ICommentVM[]
-  readonly createdAt: Date
   updatedAt: Date
   updateTitle(title: string): void
   updateContent(content: string): void

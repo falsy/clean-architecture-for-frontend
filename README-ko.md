@@ -175,12 +175,14 @@ Client-A는 `Domains`와 `Adapters` 레이어의 요소들을 그대로 사용�
 
 ```tsx
 import { API_URL } from "../constants"
+import infrastructuresFn from "./infrastructures"
 import repositoriesFn from "./repositories"
 import useCasesFn from "./useCases"
 import presentersFn from "./presenters"
 
-export default function di() {
-  const repositories = repositoriesFn(API_URL)
+export default function di(apiUrl = API_URL) {
+  const infrastructures = infrastructuresFn(apiUrl)
+  const repositories = repositoriesFn(infrastructures)
   const useCases = useCasesFn(repositories)
   const presenters = presentersFn(useCases)
 
@@ -231,11 +233,11 @@ import ICommentVM, { ICommentVMParams } from "./interfaces/ICommentVM"
 
 export default class CommentVM implements ICommentVM {
   readonly id: string
-  key: string
   readonly postId: string
   readonly author: IUserInfoVO
-  content: string
   readonly createdAt: Date
+  key: string
+  content: string
   updatedAt: Date
 
   constructor(parmas: ICommentVMParams) {

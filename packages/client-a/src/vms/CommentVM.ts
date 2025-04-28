@@ -4,11 +4,11 @@ import ICommentVM, { ICommentVMParams } from "./interfaces/ICommentVM"
 
 export default class CommentVM implements ICommentVM {
   readonly id: string
-  key: string
   readonly postId: string
   readonly author: IUserInfoVO
-  content: string
   readonly createdAt: Date
+  key: string
+  content: string
   updatedAt: Date
 
   constructor(parmas: ICommentVMParams) {
